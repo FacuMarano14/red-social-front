@@ -1,0 +1,9 @@
+<mat-card class="profile-card">
+  <h2>Mi perfil</h2>
+  <div *ngIf="user">
+    <img *ngIf="user.profileImageUrl" [src]="user.profileImageUrl" alt="Foto de perfil" width="100" />
+    <p><b>Usuario:</b> {{ user.username }}</p>
+    <p><b>Nombre:</b> {{ user.firstName }} {{ user.lastName }}</p>
+    <p><b>Email:</b> {{ user.email }}</p>
+  </div>
+</mat-card>
