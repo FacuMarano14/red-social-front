@@ -1,43 +1,42 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { environment } from '../../environments.prod';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  // Asegúrate de que esta sea la ruta base correcta para tu backend
-  private apiUrl = '/api/auth'; 
+
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
+  
+
   register(formData: FormData): Observable<any> { 
-    // POST /api/auth/register
-    return this.http.post(`${this.apiUrl}/register`, formData);
-  }
+        // 🟢 Usamos la URL base y solo añadimos la parte /auth/register
+        // La URL final será: https://.../api + /auth/register
+        return this.http.post(`${this.apiUrl}/auth/register`, formData);
+    }
 
-  /**
-   * Envía las credenciales e integra el guardado de sesión si es exitoso.
-   */
-  login(data: any): Observable<any> {
-    // POST /api/auth/login
-    return this.http.post<any>(`${this.apiUrl}/login`, data).pipe(
-      tap(response => {
-        // 🟢 INTEGRAMOS TU LÓGICA DE GUARDADO AQUÍ
-        const token = response.token || response.access_token;
-        const user = response.user; 
-        
-        if (token && user) {
-          // Llama a tu función saveSession para guardar el token y el usuario
-          this.saveSession(token, user); 
-        }
-      })
-    );
-  }
+    /**
+     * Envía las credenciales e integra el guardado de sesión si es exitoso.
+     */
+    login(data: any): Observable<any> {
+        // 🟢 Usamos la URL base y solo añadimos la parte /auth/login
+        return this.http.post<any>(`${this.apiUrl}/auth/login`, data).pipe(
+            tap(response => {
+                // 🟢 INTEGRAMOS TU LÓGICA DE GUARDADO AQUÍ
+                const token = response.token || response.access_token;
+                const user = response.user; 
+                
+                if (token && user) {
+                    this.saveSession(token, user); 
+                }
+            })
+        );
+    }
 
-  /**
-   * Tu función original para guardar el token y el usuario en Local Storage.
-   * Modificada para usar la clave 'Token' para el token (visto en tu captura)
-   * y 'user' para el objeto del usuario.
-   */
+
   saveSession(token: string, user: any) {
     // ⚠️ CRÍTICO: Usamos 'Token' para la clave del JWT, que es lo que usa tu sistema
     localStorage.setItem('Token', token);

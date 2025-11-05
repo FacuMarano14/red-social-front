@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
 
-  apiUrl: 'https://red-social-api-070a.onrender.com/api', 
+  apiUrl: 'https://red-social-api-070a.onrender.com', 
 
   storageKey: 'auth_token_rs', 
 
